@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface WelcomeProps {
   nombre: string;
@@ -6,13 +6,7 @@ interface WelcomeProps {
 
 const Welcome: React.FC<WelcomeProps> = (props) => {
   console.log("props:", props.nombre);
-  return (
-    <h1>
-      Hola soy {props.nombre}
-    </h1>
-  );
+  return <h1>Hola soy {props.nombre}</h1>;
 };
-
-
 
 export default Welcome;
