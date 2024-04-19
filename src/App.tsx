@@ -2,18 +2,21 @@
 import { useEffect, useState } from "react"
 import { getCities, db } from "./firebase"
 import Welcome from "./Welcome"
+
 function App() { 
-  const [nombre,setNombre] = useState()
+  const [nombres,setNombres] = useState([])
   useEffect(()=>{
     getCities(db).then((data)=>{
       //data.map((data)=>{console.log("data:", data)})
-      setNombre(data[0])
+      setNombres(data)
     })
-    
   },[])
-  
   return (
-  <Welcome nombre = {nombre?.name}/> 
+    <div>
+      {nombres.map((nombre, index) => (
+        <Welcome key={index} nombre={nombre.name}/>
+      ))}
+    </div>
   )
 }
 
