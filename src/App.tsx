@@ -12,11 +12,11 @@ function App() {
     })
   },[])
   return (
-    <div>
+    <>
       {nombres.map((nombre, index) => (
         <Welcome key={index} nombre={nombre.name}/>
       ))}
-    </div>
+    </>
   )
 }
 
