@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  getLisitaCollection,
-  db,
-  lisitaDocumentCollection,
-} from "./components/firebase";
+import { getLisitaCollection, db, lisitaDocumentCollection } from "./firebase";
 import PrintCollection from "./components/PrintCollection";
 import { MyForm } from "./components/MyForm";
 

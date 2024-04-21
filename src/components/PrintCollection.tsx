@@ -1,5 +1,5 @@
 import React from "react";
-import { lisitaDocumentCollection } from "./firebase";
+import { lisitaDocumentCollection } from "../firebase";
 
 interface PrintCollectionProps {
   collection: lisitaDocumentCollection;

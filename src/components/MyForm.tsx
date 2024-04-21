@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { insertData } from "./firebase";
+import { insertData } from "../firebase";
 
 export const MyForm: React.FC = () => {
   const [nombre, setNombre] = useState<string>("");
