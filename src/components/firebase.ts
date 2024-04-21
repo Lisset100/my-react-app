@@ -5,10 +5,11 @@ import {
   getFirestore,
   collection,
   getDocs,
+  addDoc,
 } from "firebase/firestore";
 export interface lisitaDocumentCollection {
   name: string;
-  edad: number;
+  age: number;
 }
 
 const firebaseConfig = {
@@ -25,7 +26,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 export const db = getFirestore(app);
 
-export async function getCities(db: Firestore) {
+export async function getLisitaCollection(db: Firestore) {
   const citiesCol = collection(db, "lisita");
   const citySnapshot = await getDocs(citiesCol);
   return citySnapshot.docs.map((doc) =>
