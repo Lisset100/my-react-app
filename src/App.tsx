@@ -7,10 +7,7 @@ function App() {
   const [documentsLisita, setDocumentsLisita] =
     useState<lisitaDocumentCollection[]>();
   useEffect(() => {
-    getLisitaCollection(db).then((data) => {
-      //data.map((data)=>{console.log("data:", data)})
-      setDocumentsLisita(data);
-    });
+    getLisitaCollection(db).then((data) => setDocumentsLisita(data));
   }, []);
   return (
     <>
