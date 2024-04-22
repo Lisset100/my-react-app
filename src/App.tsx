@@ -1,9 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  getLisitaCollection,
-  db,
-  lisitaDocumentCollection,
-} from "./components/firebase";
+import { getLisitaCollection, db, lisitaDocumentCollection } from "./firebase";
 import PrintCollection from "./components/PrintCollection";
 import { MyForm } from "./components/MyForm";
 
@@ -11,10 +7,7 @@ function App() {
   const [documentsLisita, setDocumentsLisita] =
     useState<lisitaDocumentCollection[]>();
   useEffect(() => {
-    getLisitaCollection(db).then((data) => {
-      //data.map((data)=>{console.log("data:", data)})
-      setDocumentsLisita(data);
-    });
+    getLisitaCollection(db).then((data) => setDocumentsLisita(data));
   }, []);
   return (
     <>
