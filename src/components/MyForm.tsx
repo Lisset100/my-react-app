@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import { insertData, lisitaDocumentCollection } from "../firebase";
-
-const inialData = {
-  name: "",
-  age: 0,
-};
+import { insertData } from "./firebase";
 
 export const MyForm: React.FC = () => {
-  const [data, setData] = useState<lisitaDocumentCollection>(inialData);
+  const [nombre, setNombre] = useState<string>("");
+  const [edad, setEdad] = useState<number>(0);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const result = await insertData(data);
-    if (result) setData(inialData);
+    const result = await insertData({ name: nombre, age: edad });
+    if (result) {
+      setNombre("");
+      setEdad(0);
+    }
   };
 
   return (
@@ -21,12 +20,8 @@ export const MyForm: React.FC = () => {
         Nombre:
         <input
           type="text"
-          value={data.name}
-          onChange={(e) =>
-            setData((beforeData) => {
-              return { ...beforeData, name: e.target.value };
-            })
-          }
+          value={nombre}
+          onChange={(e) => setNombre(e.target.value)}
         />
       </label>
       <br />
@@ -34,12 +29,8 @@ export const MyForm: React.FC = () => {
         Edad:
         <input
           type="number"
-          value={data.age}
-          onChange={(e) =>
-            setData((beforeData) => {
-              return { ...beforeData, age: parseInt(e.target.value) };
-            })
-          }
+          value={edad}
+          onChange={(e) => setEdad(parseInt(e.target.value))}
         />
       </label>
       <br />
