@@ -1,16 +1,26 @@
 import React, { useState } from "react";
-import { insertData } from "./firebase";
+import { db, lisitaDocumentCollection } from "./firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 export const MyForm: React.FC = () => {
   const [nombre, setNombre] = useState<string>("");
   const [edad, setEdad] = useState<number>(0);
 
+  const insertData = async (data: lisitaDocumentCollection) => {
+    await addDoc(collection(db, "lisita"), data);
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const result = await insertData({ name: nombre, age: edad });
-    if (result) {
+
+    try {
+      await insertData({ name: nombre, age: edad });
       setNombre("");
       setEdad(0);
+
+      console.log("¡Datos guardados exitosamente!");
+    } catch (error) {
+      console.error("Error al guardar los datos", error);
     }
   };
 

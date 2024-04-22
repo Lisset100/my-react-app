@@ -33,13 +33,3 @@ export async function getLisitaCollection(db: Firestore) {
     doc.data()
   ) as lisitaDocumentCollection[];
 }
-
-export const insertData = async (data: lisitaDocumentCollection) => {
-  try {
-    await addDoc(collection(db, "lisita"), data);
-    console.log("¡Datos guardados exitosamente!");
-    return true;
-  } catch (error) {
-    console.error("Error al guardar los datos", error);
-  }
-};
