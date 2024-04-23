@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { insertData, lisitaDocumentCollection } from "../firebase";
+import { getFirestore, collection, onSnapshot } from "firebase/firestore";
+
+export const db = getFirestore();
 
 const inialData = {
   name: "",
@@ -8,6 +11,20 @@ const inialData = {
 
 export const MyForm: React.FC = () => {
   const [data, setData] = useState<lisitaDocumentCollection>(inialData);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "lisita"), (snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "modified") {
+          setData(change.doc.data() as lisitaDocumentCollection);
+        }
+      });
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
