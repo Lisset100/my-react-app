@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { insertData, lisitaDocumentCollection } from "../firebase";
+import {
+  insertData,
+  lisitaDocumentCollection,
+  deleteDocument,
+} from "../firebase";
 
 const inialData = {
   name: "",
@@ -15,36 +19,44 @@ export const MyForm: React.FC = () => {
     if (result) setData(inialData);
   };
 
+  const handleDelete = async () => {
+    const result = await deleteDocument(data.name, data.age);
+    if (result) setData(inialData);
+  };
+
   return (
-    <form onSubmit={handleSubmit}>
-      <label>
-        Nombre:
-        <input
-          type="text"
-          value={data.name}
-          onChange={(e) =>
-            setData((beforeData) => {
-              return { ...beforeData, name: e.target.value };
-            })
-          }
-        />
-      </label>
-      <br />
-      <label>
-        Edad:
-        <input
-          type="number"
-          value={data.age}
-          onChange={(e) =>
-            setData((beforeData) => {
-              return { ...beforeData, age: parseInt(e.target.value) };
-            })
-          }
-        />
-      </label>
-      <br />
-      <button type="submit">Guardar Datos</button>
-    </form>
+    <div>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Nombre:
+          <input
+            type="text"
+            value={data.name}
+            onChange={(e) =>
+              setData((beforeData) => {
+                return { ...beforeData, name: e.target.value };
+              })
+            }
+          />
+        </label>
+        <br />
+        <label>
+          Edad:
+          <input
+            type="number"
+            value={data.age}
+            onChange={(e) =>
+              setData((beforeData) => {
+                return { ...beforeData, age: parseInt(e.target.value) };
+              })
+            }
+          />
+        </label>
+        <br />
+        <button type="submit">Guardar Datos</button>
+      </form>
+      <button onClick={handleDelete}>Eliminar Datos</button>
+    </div>
   );
 };
 

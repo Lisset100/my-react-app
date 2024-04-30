@@ -5,6 +5,9 @@ import {
   collection,
   getDocs,
   addDoc,
+  query,
+  where,
+  deleteDoc,
 } from "firebase/firestore";
 export interface lisitaDocumentCollection {
   name: string;
@@ -39,5 +42,25 @@ export const insertData = async (data: lisitaDocumentCollection) => {
     return true;
   } catch (error) {
     console.error("Error al guardar los datos", error);
+  }
+};
+
+export const deleteDocument = async (name: string, age: number) => {
+  try {
+    const querySnapshot = await getDocs(
+      query(
+        collection(db, "lisita"),
+        where("name", "==", name),
+        where("age", "==", age)
+      )
+    );
+    querySnapshot.forEach((doc) => {
+      deleteDoc(doc.ref);
+      console.log("¡Documento eliminado exitosamente!");
+    });
+    return true;
+  } catch (error) {
+    console.error("Error al eliminar el documento", error);
+    return false;
   }
 };
