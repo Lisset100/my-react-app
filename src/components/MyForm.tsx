@@ -6,6 +6,7 @@ import {
 } from "../firebase";
 
 const inialData = {
+  id: "",
   name: "",
   age: 0,
 };
@@ -19,8 +20,8 @@ export const MyForm: React.FC = () => {
     if (result) setData(inialData);
   };
 
-  const handleDelete = async () => {
-    const result = await deleteDocument(data.name, data.age);
+  const handleDeleteAll = async () => {
+    const result = await deleteDocument();
     if (result) setData(inialData);
   };
 
@@ -55,7 +56,7 @@ export const MyForm: React.FC = () => {
         <br />
         <button type="submit">Guardar Datos</button>
       </form>
-      <button onClick={handleDelete}>Eliminar Datos</button>
+      <button onClick={handleDeleteAll}>Eliminar Datos</button>
     </div>
   );
 };

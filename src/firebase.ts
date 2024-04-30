@@ -5,11 +5,11 @@ import {
   collection,
   getDocs,
   addDoc,
-  query,
-  where,
   deleteDoc,
+  doc,
 } from "firebase/firestore";
 export interface lisitaDocumentCollection {
+  id: string;
   name: string;
   age: number;
 }
@@ -45,19 +45,23 @@ export const insertData = async (data: lisitaDocumentCollection) => {
   }
 };
 
-export const deleteDocument = async (name: string, age: number) => {
+export const deleteDocument = async () => {
   try {
-    const querySnapshot = await getDocs(
-      query(
-        collection(db, "lisita"),
-        where("name", "==", name),
-        where("age", "==", age)
-      )
-    );
+    const querySnapshot = await getDocs(collection(db, "lisita"));
     querySnapshot.forEach((doc) => {
       deleteDoc(doc.ref);
       console.log("¡Documento eliminado exitosamente!");
     });
+    return true;
+  } catch (error) {
+    console.error("Error al eliminar el documento", error);
+    return false;
+  }
+};
+
+export const handleDeleteOnlyOne = async (id: string) => {
+  try {
+    await deleteDoc(doc(db, "lisita", id));
     return true;
   } catch (error) {
     console.error("Error al eliminar el documento", error);

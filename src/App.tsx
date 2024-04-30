@@ -11,7 +11,9 @@ function App() {
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "lisita"), (snapshot) => {
       setDocumentsLisita(
-        snapshot.docs.map((data) => data.data() as lisitaDocumentCollection)
+        snapshot.docs.map((data) => {
+          return { ...data.data(), id: data.id } as lisitaDocumentCollection;
+        })
       );
     });
 
