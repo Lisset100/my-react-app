@@ -7,9 +7,12 @@ interface PrintCollectionProps {
 }
 
 const PrintCollection: React.FC<PrintCollectionProps> = (props) => {
+  const { latitude, longitude } = props.collection.location;
+  const locationString = `Latitud: ${latitude}, Longitud: ${longitude}`;
   return (
     <h1>
-      Hola soy {props.collection.name} y tengo {props.collection.age}
+      Hola soy {props.collection.name} y tengo {props.collection.age}. Mi
+      ubicacion es {locationString}.
       <Button
         variant="contained"
         onClick={() => handleDeleteOnlyOne(props.collection.id)}
