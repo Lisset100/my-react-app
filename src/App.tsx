@@ -7,6 +7,7 @@ import { onSnapshot, collection } from "@firebase/firestore";
 function App() {
   const [documentsLisita, setDocumentsLisita] =
     useState<lisitaDocumentCollection[]>();
+  console.log(documentsLisita[0].location);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "lisita"), (snapshot) => {

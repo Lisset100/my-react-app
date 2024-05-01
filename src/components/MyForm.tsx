@@ -6,11 +6,21 @@ import {
 } from "../firebase";
 import { Button, InputLabel, TextField } from "@mui/material";
 import { FormControl } from "@mui/base/FormControl";
+import { GeoPoint } from "firebase/firestore";
 
 const inialData = {
   id: "",
   name: "",
   age: 0,
+  location: {
+    latitude: 0,
+    longitude: 0,
+    isEqual: (_other: GeoPoint) => true,
+    toJSON: () => ({
+      latitude: 0,
+      longitude: 0,
+    }),
+  },
 };
 
 export const MyForm: React.FC = () => {

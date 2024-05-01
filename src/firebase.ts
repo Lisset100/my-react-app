@@ -7,11 +7,13 @@ import {
   addDoc,
   deleteDoc,
   doc,
+  GeoPoint,
 } from "firebase/firestore";
 export interface lisitaDocumentCollection {
   id: string;
   name: string;
   age: number;
+  location: GeoPoint;
 }
 
 const firebaseConfig = {
