@@ -4,6 +4,8 @@ import {
   lisitaDocumentCollection,
   deleteDocument,
 } from "../firebase";
+import { Button, InputLabel, TextField } from "@mui/material";
+import { FormControl } from "@mui/base/FormControl";
 
 const inialData = {
   id: "",
@@ -28,35 +30,43 @@ export const MyForm: React.FC = () => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <label>
-          Nombre:
-          <input
-            type="text"
-            value={data.name}
-            onChange={(e) =>
-              setData((beforeData) => {
-                return { ...beforeData, name: e.target.value };
-              })
-            }
-          />
-        </label>
-        <br />
-        <label>
-          Edad:
-          <input
-            type="number"
-            value={data.age}
-            onChange={(e) =>
-              setData((beforeData) => {
-                return { ...beforeData, age: parseInt(e.target.value) };
-              })
-            }
-          />
-        </label>
-        <br />
-        <button type="submit">Guardar Datos</button>
+        <FormControl>
+          <div>
+            <InputLabel htmlFor="name">Nombre:</InputLabel>
+            <TextField
+              id="name"
+              type="text"
+              value={data.name}
+              onChange={(e) =>
+                setData((beforeData) => {
+                  return { ...beforeData, name: e.target.value };
+                })
+              }
+            />
+            <InputLabel htmlFor="age">Edad:</InputLabel>
+            <TextField
+              id="age"
+              type="number"
+              value={data.age}
+              onChange={(e) =>
+                setData((beforeData) => {
+                  return { ...beforeData, age: parseInt(e.target.value) };
+                })
+              }
+            />
+          </div>
+          <Button type="submit" variant="contained" color="success">
+            Guardar Datos
+          </Button>
+        </FormControl>
       </form>
-      <button onClick={handleDeleteAll}>Eliminar Datos</button>
+      <Button
+        variant="outlined"
+        onClick={() => handleDeleteAll()}
+        color="error"
+      >
+        Eliminar Todo
+      </Button>
     </div>
   );
 };

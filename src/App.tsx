@@ -22,12 +22,12 @@ function App() {
     };
   }, []);
   return (
-    <>
+    <div>
       <MyForm />
       {documentsLisita?.map?.((document, index) => (
         <PrintCollection key={index} collection={document} />
       ))}
-    </>
+    </div>
   );
 }
 
