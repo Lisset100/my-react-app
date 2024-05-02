@@ -43,17 +43,10 @@ function App() {
     googleMapsApiKey: "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc",
   });
 
-  const [map, setMap] = useState<google.maps.Map | null>(null);
-
-  useEffect(() => {
-    if (map) map.setZoom(12);
-  }, [map]);
+  const [_map, setMap] = useState<google.maps.Map | null>(null);
 
   const onLoad = useCallback((map: google.maps.Map) => {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
-
+    map.setZoom(12);
     setMap(map);
   }, []);
 
