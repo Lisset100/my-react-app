@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { db, handleDeleteOnlyOne, lisitaDocumentCollection } from "./firebase";
 import { MyForm } from "./components/MyForm";
 import { onSnapshot, collection } from "@firebase/firestore";
+import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+
 import {
   Button,
   Paper,
@@ -12,6 +14,11 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+
+const center = {
+  lat: 20.587805,
+  lng: -100.387108,
+};
 
 function App() {
   const [documentsLisita, setDocumentsLisita] =
@@ -30,6 +37,30 @@ function App() {
       unsubscribe();
     };
   }, []);
+
+  const { isLoaded } = useJsApiLoader({
+    id: "GoogleMapsApiKey",
+    googleMapsApiKey: "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc",
+  });
+
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+
+  useEffect(() => {
+    if (map) map.setZoom(12);
+  }, [map]);
+
+  const onLoad = useCallback((map: google.maps.Map) => {
+    // This is just an example of getting and using the map instance!!! don't just blindly copy!
+    const bounds = new window.google.maps.LatLngBounds(center);
+    map.fitBounds(bounds);
+
+    setMap(map);
+  }, []);
+
+  const onUnmount = useCallback(() => {
+    setMap(null);
+  }, []);
+
   return (
     <div>
       <MyForm />
@@ -68,6 +99,31 @@ function App() {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {isLoaded ? (
+        <GoogleMap
+          mapContainerStyle={{
+            width: "400px",
+            height: "400px",
+          }}
+          center={center}
+          zoom={12}
+          onLoad={onLoad}
+          onUnmount={onUnmount}
+        >
+          {/* Child components, such as markers, info windows, etc. */}
+          {documentsLisita?.map((data) => (
+            <Marker
+              position={{
+                lat: data.location.latitude,
+                lng: data.location.longitude,
+              }}
+            />
+          ))}
+        </GoogleMap>
+      ) : (
+        <></>
+      )}
     </div>
   );
 }
