@@ -17,6 +17,12 @@ const initialData = {
 
 interface MyFormProps {
   isLoaded: boolean;
+  setCenter: React.Dispatch<
+    React.SetStateAction<{
+      lat: number;
+      lng: number;
+    }>
+  >;
 }
 
 export const MyForm: React.FC<MyFormProps> = (props) => {
@@ -27,6 +33,10 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
     const result = await insertData(data);
     if (result) {
       setData(initialData);
+      props.setCenter({
+        lat: data.location.latitude,
+        lng: data.location.longitude,
+      });
       if (searchBoxRef.current) searchBoxRef.current.value = "";
     }
   };
