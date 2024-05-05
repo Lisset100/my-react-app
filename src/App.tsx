@@ -8,12 +8,12 @@ import { Library } from "@googlemaps/js-api-loader";
 import { MyComponent } from "./components/MyComponent";
 import PrintCollection from "./components/PrintCollection";
 
-const center = {
+const initCenter = {
   lat: 20.587805,
   lng: -100.387108,
 };
 
-interface lisitaDocumentCollectionId extends lisitaDocumentCollection {
+export interface lisitaDocumentCollectionId extends lisitaDocumentCollection {
   id: string;
 }
 
@@ -24,6 +24,8 @@ const libraries = ["places"] as Library[];
 function App() {
   const [documentsLisita, setDocumentsLisita] =
     useState<lisitaDocumentCollectionId[]>();
+
+  const [center, setCenter] = useState(initCenter);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "lisita"), (snapshot) => {
@@ -67,7 +69,10 @@ function App() {
       <div>
         <MyComponent argument1={"hola"} />
         <MyForm isLoaded={isLoaded} />
-        <PrintCollection documentsLisita={documentsLisita} />
+        <PrintCollection
+          documentsLisita={documentsLisita}
+          setCenter={setCenter}
+        />
       </div>
       <div
         style={{
