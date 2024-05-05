@@ -5,6 +5,7 @@ import { onSnapshot, collection } from "@firebase/firestore";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { MyComponent } from "./components/MyComponent";
 import PrintCollection from "./components/PrintCollection";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const center = {
   lat: 20.587805,
@@ -12,8 +13,8 @@ const center = {
 };
 
 function App() {
-  const [documentsLisita, setDocumentsLisita] =
-    useState<lisitaDocumentCollection[]>();
+  const [documentsLisita, setDocumentsLisita] = useState<lisitaDocumentCollection[]>();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "lisita"), (snapshot) => {
@@ -31,61 +32,53 @@ function App() {
 
   const { isLoaded } = useJsApiLoader({
     id: "GoogleMapsApiKey",
-    googleMapsApiKey: "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc",
+    googleMapsApiKey: "TuClaveDeAPIdeGoogleMaps",
   });
-
-  const [_map, setMap] = useState<google.maps.Map | null>(null);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     map.setZoom(12);
-    setMap(map);
+    setIsLoading(false); 
   }, []);
 
-  const onUnmount = useCallback(() => {
-    setMap(null);
-  }, []);
+  const onUnmount = useCallback(() => {}, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-      }}
-    >
+    <div style={{ display: "flex", flexDirection: "row" }}>
       <div>
         <MyComponent argument1={"hola"} />
         <MyForm />
         <PrintCollection documentsLisita={documentsLisita} />
       </div>
-      <div
-        style={{
-          width: "100%",
-        }}
-      >
-        {isLoaded ? (
-          <GoogleMap
-            mapContainerStyle={{
-              margin: "auto",
-              width: "100%",
-              height: "500px",
-            }}
-            center={center}
-            zoom={12}
-            onLoad={onLoad}
-            onUnmount={onUnmount}
-          >
-            {/* Child components, such as markers, info windows, etc. */}
-            {documentsLisita?.map((data) => (
-              <Marker
-                position={{
-                  lat: data.location.latitude,
-                  lng: data.location.longitude,
-                }}
-              />
-            ))}
-          </GoogleMap>
+      <div style={{ width: "100%" }}>
+        {isLoading ? (
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "500px" }}>
+            <CircularProgress />
+          </div>
         ) : (
-          <></>
+          isLoaded && (
+            <GoogleMap
+              mapContainerStyle={{
+                margin: "auto",
+                width: "100%",
+                height: "500px",
+              }}
+              center={center}
+              zoom={12}
+              onLoad={onLoad}
+              onUnmount={onUnmount}
+            >
+              {/* Child components, such as markers, info windows, etc. */}
+              {documentsLisita?.map((data) => (
+                <Marker
+                  key={data.id}
+                  position={{
+                    lat: data.location.latitude,
+                    lng: data.location.longitude,
+                  }}
+                />
+              ))}
+            </GoogleMap>
+          )
         )}
       </div>
     </div>
