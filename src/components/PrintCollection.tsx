@@ -1,4 +1,4 @@
-import { handleDeleteOnlyOne, lisitaDocumentCollection } from "../firebase";
+import { handleDeleteOnlyOne } from "../firebase";
 import Button from "@mui/material/Button";
 import {
   Paper,
@@ -9,9 +9,16 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import { lisitaDocumentCollectionId } from "../App";
 
 interface PrintCollectionProps {
-  documentsLisita: lisitaDocumentCollection[] | undefined;
+  documentsLisita: lisitaDocumentCollectionId[] | undefined;
+  setCenter: React.Dispatch<
+    React.SetStateAction<{
+      lat: number;
+      lng: number;
+    }>
+  >;
 }
 
 const PrintCollection = (props: PrintCollectionProps) => {
@@ -20,7 +27,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {["Name", "Age", "Latitude", "Longitude", "Delete"].map(
+            {["Name", "Age", "Latitude", "Longitude", "Delete", "Go To"].map(
               (data: string, id) => {
                 return (
                   <TableCell key={"HeadRow" + id} align="right">
@@ -48,6 +55,20 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   color="error"
                 >
                   Delete
+                </Button>
+              </TableCell>
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  onClick={() =>
+                    props.setCenter({
+                      lat: row.location.latitude,
+                      lng: row.location.longitude,
+                    })
+                  }
+                  color="primary"
+                >
+                  Go To
                 </Button>
               </TableCell>
             </TableRow>
