@@ -73,6 +73,6 @@ export const handleDeleteOnlyOne = async (id: string) => {
     return false;
   }
 };
-console.log("hola")
+
 
 

@@ -32,7 +32,7 @@ function App() {
 
   const { isLoaded } = useJsApiLoader({
     id: "GoogleMapsApiKey",
-    googleMapsApiKey: "TuClaveDeAPIdeGoogleMaps",
+    googleMapsApiKey: "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc",
   });
 
   const onLoad = useCallback((map: google.maps.Map) => {
