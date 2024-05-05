@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 export interface lisitaDocumentCollection {
   id: string;
-  name: string;
+  place: string;
   age: number;
   location: GeoPoint;
 }

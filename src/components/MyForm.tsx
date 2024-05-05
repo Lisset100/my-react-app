@@ -10,7 +10,7 @@ import { GeoPoint } from "firebase/firestore";
 
 const inialData = {
   id: "",
-  name: "",
+  place: "",
   age: 0,
   location: {
     latitude: 0,
@@ -42,14 +42,14 @@ export const MyForm: React.FC = () => {
       <form onSubmit={handleSubmit}>
         <FormControl>
           <div>
-            <InputLabel htmlFor="name">Nombre:</InputLabel>
+            <InputLabel htmlFor="place">Lugar:</InputLabel>
             <TextField
-              id="name"
+              id="place"
               type="text"
-              value={data.name}
+              value={data.place}
               onChange={(e) =>
                 setData((beforeData) => {
-                  return { ...beforeData, name: e.target.value };
+                  return { ...beforeData, place: e.target.value };
                 })
               }
             />

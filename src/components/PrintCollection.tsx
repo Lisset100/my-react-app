@@ -20,7 +20,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            {["Name", "Age", "Latitude", "Longitude", "Delete"].map(
+            {["Place", "Age", "Latitude", "Longitude", "Delete"].map(
               (data: string) => {
                 return <TableCell align="right">{data}</TableCell>;
               }
@@ -33,7 +33,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
               key={"row" + id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell align="right">{row.name}</TableCell>
+              <TableCell align="right">{row.place}</TableCell>
               <TableCell align="right">{row.age}</TableCell>
               <TableCell align="right">{row.location.latitude}</TableCell>
               <TableCell align="right">{row.location.longitude}</TableCell>
