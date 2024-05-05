@@ -65,18 +65,23 @@ export const MyForm: React.FC = () => {
               }
             />
           </div>
-          <Button type="submit" variant="contained" color="success">
-            Guardar Datos
-          </Button>
-        </FormControl>
+          <div>
+            <Button type="submit" variant="contained" color="success" style={{display: "inline-grid"}}>
+              Guardar Datos
+            </Button>
+            <Button
+          variant="outlined"
+          onClick={() => handleDeleteAll()}
+          color="error"
+          style={{display: "inline-grid", marginLeft: "350px"}}
+        >
+          Eliminar Todo
+        </Button>
+        
+        </div>
+      
+      </FormControl>
       </form>
-      <Button
-        variant="outlined"
-        onClick={() => handleDeleteAll()}
-        color="error"
-      >
-        Eliminar Todo
-      </Button>
     </div>
   );
 };
