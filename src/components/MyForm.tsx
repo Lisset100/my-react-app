@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   insertData,
   lisitaDocumentCollection,
@@ -13,15 +13,8 @@ const initialData = {
   id: "",
   name: "",
   age: 0,
-  location: {
-    latitude: 0,
-    longitude: 0,
-    isEqual: (_other: GeoPoint) => true,
-    toJSON: () => ({
-      latitude: 0,
-      longitude: 0,
-    }),
-  },
+  location: new GeoPoint(0, 0),
+  locationString: "",
 };
 
 interface MyFormProps {
@@ -29,12 +22,17 @@ interface MyFormProps {
 }
 
 export const MyForm: React.FC<MyFormProps> = (props) => {
-  const [data, setData] = useState<lisitaDocumentCollection>(initialData);
+  const [data, setData] = useState<
+    lisitaDocumentCollection & { locationString: string }
+  >(initialData);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await insertData(data);
-    if (result) setData(initialData);
+    if (result) {
+      setData(initialData);
+      if (searchBoxRef.current) searchBoxRef.current.value = "";
+    }
   };
 
   const handleDeleteAll = async () => {
@@ -43,6 +41,8 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
   };
   const [searchBox, setSearchBox] =
     useState<google.maps.places.SearchBox | null>(null);
+
+  const searchBoxRef = useRef<HTMLInputElement>(null);
 
   return (
     <div>
@@ -74,21 +74,33 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
             />
             {props.isLoaded && (
               <StandaloneSearchBox
-                onPlacesChanged={() =>
+                onPlacesChanged={() => {
                   searchBox?.getPlaces()?.forEach((data) => {
-                    console.log("=====>data", data);
-                  })
-                }
+                    const location = data.geometry?.location?.toJSON();
+                    if (location) {
+                      setData((data) => ({
+                        ...data,
+                        location: new GeoPoint(location.lat, location.lng),
+                      }));
+                    }
+                  });
+                }}
                 onLoad={(ref) => {
                   setSearchBox(ref);
                 }}
               >
-                <TextField fullWidth label="Location" variant="outlined" />
+                <TextField
+                  fullWidth
+                  label="Location"
+                  variant="outlined"
+                  placeholder=""
+                  inputRef={searchBoxRef}
+                />
               </StandaloneSearchBox>
             )}
           </div>
           <Button type="submit" variant="contained" color="success">
-            Guardar Datos
+            Save Data
           </Button>
         </FormControl>
       </form>
@@ -97,7 +109,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
         onClick={() => handleDeleteAll()}
         color="error"
       >
-        Eliminar Todo
+        Delete All
       </Button>
     </div>
   );

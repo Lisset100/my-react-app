@@ -47,7 +47,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   onClick={() => handleDeleteOnlyOne(row.id)}
                   color="error"
                 >
-                  Eliminar Datos
+                  Delete
                 </Button>
               </TableCell>
             </TableRow>
