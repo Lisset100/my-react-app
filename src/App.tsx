@@ -13,19 +13,23 @@ const center = {
   lng: -100.387108,
 };
 
+interface lisitaDocumentCollectionId extends lisitaDocumentCollection {
+  id: string;
+}
+
 export const YOUR_GOOGLE_MAPS_API_KEY =
   "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc";
 
 const libraries = ["places"] as Library[];
 function App() {
   const [documentsLisita, setDocumentsLisita] =
-    useState<lisitaDocumentCollection[]>();
+    useState<lisitaDocumentCollectionId[]>();
 
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "lisita"), (snapshot) => {
       setDocumentsLisita(
         snapshot.docs.map((data) => {
-          return { ...data.data(), id: data.id } as lisitaDocumentCollection;
+          return { ...data.data(), id: data.id } as lisitaDocumentCollectionId;
         })
       );
     });

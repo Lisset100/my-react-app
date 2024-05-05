@@ -10,11 +10,9 @@ import { GeoPoint } from "firebase/firestore";
 import { StandaloneSearchBox } from "@react-google-maps/api";
 
 const initialData = {
-  id: "",
   name: "",
   age: 0,
   location: new GeoPoint(0, 0),
-  locationString: "",
 };
 
 interface MyFormProps {
@@ -22,9 +20,7 @@ interface MyFormProps {
 }
 
 export const MyForm: React.FC<MyFormProps> = (props) => {
-  const [data, setData] = useState<
-    lisitaDocumentCollection & { locationString: string }
-  >(initialData);
+  const [data, setData] = useState<lisitaDocumentCollection>(initialData);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
