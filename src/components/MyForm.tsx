@@ -110,7 +110,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                     inputRef={searchBoxRef}
                   />
                 </StandaloneSearchBox>
-              )}{" "}
+              )}
             </Grid>
           </Grid>
           <Button type="submit" variant="contained" color="success">
