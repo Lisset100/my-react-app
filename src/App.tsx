@@ -2,7 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import { db, lisitaDocumentCollection } from "./firebase";
 import { MyForm } from "./components/MyForm";
 import { onSnapshot, collection } from "@firebase/firestore";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { useJsApiLoader, Marker, GoogleMap } from "@react-google-maps/api";
+import { Library } from "@googlemaps/js-api-loader";
+
 import { MyComponent } from "./components/MyComponent";
 import PrintCollection from "./components/PrintCollection";
 
@@ -11,6 +13,10 @@ const center = {
   lng: -100.387108,
 };
 
+export const YOUR_GOOGLE_MAPS_API_KEY =
+  "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc";
+
+const libraries = ["places"] as Library[];
 function App() {
   const [documentsLisita, setDocumentsLisita] =
     useState<lisitaDocumentCollection[]>();
@@ -29,9 +35,11 @@ function App() {
     };
   }, []);
 
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded, loadError: _loadError } = useJsApiLoader({
     id: "GoogleMapsApiKey",
-    googleMapsApiKey: "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc",
+    googleMapsApiKey: YOUR_GOOGLE_MAPS_API_KEY,
+    libraries,
+    language: "es",
   });
 
   const [_map, setMap] = useState<google.maps.Map | null>(null);
@@ -54,7 +62,7 @@ function App() {
     >
       <div>
         <MyComponent argument1={"hola"} />
-        <MyForm />
+        <MyForm isLoaded={isLoaded} />
         <PrintCollection documentsLisita={documentsLisita} />
       </div>
       <div
@@ -75,8 +83,9 @@ function App() {
             onUnmount={onUnmount}
           >
             {/* Child components, such as markers, info windows, etc. */}
-            {documentsLisita?.map((data) => (
+            {documentsLisita?.map((data, id) => (
               <Marker
+                key={"marker" + id}
                 position={{
                   lat: data.location.latitude,
                   lng: data.location.longitude,

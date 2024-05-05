@@ -21,8 +21,12 @@ const PrintCollection = (props: PrintCollectionProps) => {
         <TableHead>
           <TableRow>
             {["Name", "Age", "Latitude", "Longitude", "Delete"].map(
-              (data: string) => {
-                return <TableCell align="right">{data}</TableCell>;
+              (data: string, id) => {
+                return (
+                  <TableCell key={"HeadRow" + id} align="right">
+                    {data}
+                  </TableCell>
+                );
               }
             )}
           </TableRow>
@@ -43,7 +47,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   onClick={() => handleDeleteOnlyOne(row.id)}
                   color="error"
                 >
-                  Eliminar Datos
+                  Delete
                 </Button>
               </TableCell>
             </TableRow>
