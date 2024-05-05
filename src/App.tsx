@@ -68,7 +68,7 @@ function App() {
     >
       <div>
         <MyComponent argument1={"hola"} />
-        <MyForm isLoaded={isLoaded} />
+        <MyForm isLoaded={isLoaded} setCenter={setCenter} />
         <PrintCollection
           documentsLisita={documentsLisita}
           setCenter={setCenter}
