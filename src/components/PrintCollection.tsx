@@ -24,7 +24,7 @@ interface PrintCollectionProps {
 const PrintCollection = (props: PrintCollectionProps) => {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
         <TableHead>
           <TableRow>
             {["Name", "Age", "Latitude", "Longitude", "Delete", "Go To"].map(
@@ -53,6 +53,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   variant="contained"
                   onClick={() => handleDeleteOnlyOne(row.id)}
                   color="error"
+                  size="small"
                 >
                   Delete
                 </Button>
@@ -67,6 +68,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
                     })
                   }
                   color="primary"
+                  size="small"
                 >
                   Go To
                 </Button>
