@@ -23,8 +23,13 @@ interface PrintCollectionProps {
 
 const PrintCollection = (props: PrintCollectionProps) => {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table" size="small">
+    <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
+      <Table
+        stickyHeader
+        sx={{ minWidth: 650 }}
+        aria-label="sticky table"
+        size="small"
+      >
         <TableHead>
           <TableRow>
             {["Name", "Age", "Latitude", "Longitude", "Delete", "Go To"].map(
