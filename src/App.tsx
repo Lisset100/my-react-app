@@ -8,6 +8,8 @@ import { Library } from "@googlemaps/js-api-loader";
 import { MyComponent } from "./components/MyComponent";
 import PrintCollection from "./components/PrintCollection";
 import { Grid } from "@mui/material";
+import ReactDOMServer from "react-dom/server";
+import * as Icons from "@mui/icons-material";
 
 const initCenter = {
   lat: 20.587805,
@@ -17,6 +19,16 @@ const initCenter = {
 export interface lisitaDocumentCollectionId extends lisitaDocumentCollection {
   id: string;
 }
+
+export type IconNames = keyof typeof Icons;
+
+const svgIconToDataUrl = (IconComponent: IconNames) => {
+  const MyIcon = Icons[IconComponent];
+  const iconString = ReactDOMServer.renderToString(<MyIcon />);
+  const parser = new DOMParser();
+  const svgDoc = parser.parseFromString(iconString, "image/svg+xml");
+  return svgDoc.querySelector("path")?.getAttribute("d") as string;
+};
 
 export const YOUR_GOOGLE_MAPS_API_KEY =
   "AIzaSyCrbQkZChVHat_uiZDKIhJxOuYHLpY7kAc";
@@ -86,10 +98,18 @@ function App() {
             {/* Child components, such as markers, info windows, etc. */}
             {documentsLisita?.map((data, id) => (
               <Marker
+                icon={{
+                  path: svgIconToDataUrl(data.location.type),
+                  fillColor: "#fff",
+                  strokeColor: "#d32f2f",
+                  strokeWeight: 2,
+                  fillOpacity: 1,
+                  scale: 1,
+                }}
                 key={"marker" + id}
                 position={{
-                  lat: data.location.latitude,
-                  lng: data.location.longitude,
+                  lat: data.location.location.latitude,
+                  lng: data.location.location.longitude,
                 }}
               />
             ))}
