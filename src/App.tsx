@@ -62,7 +62,7 @@ function App() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      <Grid item sm={6}>
         <MyComponent argument1={"hola"} />
         <MyForm isLoaded={isLoaded} setCenter={setCenter} />
         <PrintCollection
@@ -70,7 +70,7 @@ function App() {
           setCenter={setCenter}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item sm={6}>
         {isLoaded ? (
           <GoogleMap
             mapContainerStyle={{
