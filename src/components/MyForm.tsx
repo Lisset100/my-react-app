@@ -113,18 +113,27 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
               )}
             </Grid>
           </Grid>
-          <Button type="submit" variant="contained" color="success">
-            Save Data
-          </Button>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            paddingTop={3}
+            paddingBottom={3}
+          >
+            <Button type="submit" variant="contained" color="success">
+              Save Data
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={() => handleDeleteAll()}
+              color="error"
+            >
+              Delete All
+            </Button>
+          </Grid>
         </FormControl>
       </form>
-      <Button
-        variant="outlined"
-        onClick={() => handleDeleteAll()}
-        color="error"
-      >
-        Delete All
-      </Button>
     </div>
   );
 };
