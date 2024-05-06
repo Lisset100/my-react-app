@@ -9,10 +9,19 @@ import {
   doc,
   GeoPoint,
 } from "firebase/firestore";
+
+export enum TypeLocation {
+  HOME = "Home",
+  STORE = "LocalConvenienceStore",
+}
+
 export interface lisitaDocumentCollection {
   name: string;
   age: number;
-  location: GeoPoint;
+  location: {
+    type: TypeLocation;
+    location: GeoPoint;
+  };
 }
 
 const firebaseConfig = {

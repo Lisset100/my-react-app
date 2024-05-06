@@ -51,8 +51,12 @@ const PrintCollection = (props: PrintCollectionProps) => {
             >
               <TableCell align="right">{row.name}</TableCell>
               <TableCell align="right">{row.age}</TableCell>
-              <TableCell align="right">{row.location.latitude}</TableCell>
-              <TableCell align="right">{row.location.longitude}</TableCell>
+              <TableCell align="right">
+                {row.location.location.latitude}
+              </TableCell>
+              <TableCell align="right">
+                {row.location.location.longitude}
+              </TableCell>
               <TableCell align="right">
                 <Button
                   variant="contained"
@@ -68,8 +72,8 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   variant="contained"
                   onClick={() =>
                     props.setCenter({
-                      lat: row.location.latitude,
-                      lng: row.location.longitude,
+                      lat: row.location.location.latitude,
+                      lng: row.location.location.longitude,
                     })
                   }
                   color="primary"

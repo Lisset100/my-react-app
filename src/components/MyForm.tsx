@@ -3,8 +3,16 @@ import {
   insertData,
   lisitaDocumentCollection,
   deleteDocument,
+  TypeLocation,
 } from "../firebase";
-import { Button, Grid, TextField } from "@mui/material";
+import {
+  Button,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 import { FormControl } from "@mui/base/FormControl";
 import { GeoPoint } from "firebase/firestore";
 import { StandaloneSearchBox } from "@react-google-maps/api";
@@ -12,7 +20,10 @@ import { StandaloneSearchBox } from "@react-google-maps/api";
 const initialData = {
   name: "",
   age: 0,
-  location: new GeoPoint(0, 0),
+  location: {
+    type: TypeLocation.HOME,
+    location: new GeoPoint(0, 0),
+  },
 };
 
 interface MyFormProps {
@@ -34,8 +45,8 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
     if (result) {
       setData(initialData);
       props.setCenter({
-        lat: data.location.latitude,
-        lng: data.location.longitude,
+        lat: data.location.location.latitude,
+        lng: data.location.location.longitude,
       });
       if (searchBoxRef.current) searchBoxRef.current.value = "";
     }
@@ -53,9 +64,9 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
   return (
     <div>
       <form onSubmit={handleSubmit}>
-        <FormControl>
-          <Grid container spacing={2}>
-            <Grid item xs={8}>
+        <Grid container spacing={2}>
+          <Grid item xs={8}>
+            <FormControl>
               <TextField
                 fullWidth
                 id="name"
@@ -68,8 +79,10 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                   })
                 }
               />
-            </Grid>
-            <Grid item xs={4}>
+            </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <FormControl>
               <TextField
                 fullWidth
                 id="age"
@@ -83,56 +96,85 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                   }))
                 }
               />
-            </Grid>
-            <Grid item xs={12}>
-              {props.isLoaded && (
-                <StandaloneSearchBox
-                  onPlacesChanged={() => {
-                    searchBox?.getPlaces()?.forEach((data) => {
-                      const location = data.geometry?.location?.toJSON();
-                      if (location) {
-                        setData((data) => ({
-                          ...data,
+            </FormControl>
+          </Grid>
+          <Grid item xs={12}>
+            {props.isLoaded && (
+              <StandaloneSearchBox
+                onPlacesChanged={() => {
+                  searchBox?.getPlaces()?.forEach((data) => {
+                    const location = data.geometry?.location?.toJSON();
+                    if (location) {
+                      setData((data) => ({
+                        ...data,
+                        location: {
+                          ...data.location,
                           location: new GeoPoint(location.lat, location.lng),
-                        }));
-                      }
-                    });
-                  }}
-                  onLoad={(ref) => {
-                    setSearchBox(ref);
-                  }}
-                >
-                  <TextField
-                    fullWidth
-                    label="Location"
-                    variant="outlined"
-                    placeholder=""
-                    inputRef={searchBoxRef}
-                  />
-                </StandaloneSearchBox>
-              )}
-            </Grid>
+                        },
+                      }));
+                    }
+                  });
+                }}
+                onLoad={(ref) => {
+                  setSearchBox(ref);
+                }}
+              >
+                <TextField
+                  fullWidth
+                  label="Location"
+                  variant="outlined"
+                  placeholder=""
+                  inputRef={searchBoxRef}
+                />
+              </StandaloneSearchBox>
+            )}
           </Grid>
-          <Grid
-            container
-            direction="row"
-            justifyContent="space-between"
-            alignItems="center"
-            paddingTop={3}
-            paddingBottom={3}
+          <Grid item xs={12}>
+            <FormControl>
+              <InputLabel id="select-icon-label">Type</InputLabel>
+              <Select
+                fullWidth
+                defaultValue={TypeLocation.HOME}
+                labelId="select-icon-label"
+                id="select-icon"
+                value={data.location.type}
+                label="Type"
+                onChange={(e) => {
+                  setData((data) => ({
+                    ...data,
+                    location: {
+                      ...data.location,
+                      type: e.target.value as TypeLocation,
+                    },
+                  }));
+                }}
+              >
+                {Object.entries(TypeLocation).map((data) => (
+                  <MenuItem value={data[1]}>{data[0]}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          paddingTop={3}
+          paddingBottom={3}
+        >
+          <Button type="submit" variant="contained" color="success">
+            Save Data
+          </Button>
+          <Button
+            variant="outlined"
+            onClick={() => handleDeleteAll()}
+            color="error"
           >
-            <Button type="submit" variant="contained" color="success">
-              Save Data
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={() => handleDeleteAll()}
-              color="error"
-            >
-              Delete All
-            </Button>
-          </Grid>
-        </FormControl>
+            Delete All
+          </Button>
+        </Grid>
       </form>
     </div>
   );
