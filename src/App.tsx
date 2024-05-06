@@ -7,6 +7,7 @@ import { Library } from "@googlemaps/js-api-loader";
 
 import { MyComponent } from "./components/MyComponent";
 import PrintCollection from "./components/PrintCollection";
+import { Grid } from "@mui/material";
 
 const initCenter = {
   lat: 20.587805,
@@ -60,25 +61,16 @@ function App() {
   }, []);
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-      }}
-    >
-      <div>
+    <Grid container spacing={2}>
+      <Grid item sm={6}>
         <MyComponent argument1={"hola"} />
         <MyForm isLoaded={isLoaded} setCenter={setCenter} />
         <PrintCollection
           documentsLisita={documentsLisita}
           setCenter={setCenter}
         />
-      </div>
-      <div
-        style={{
-          width: "100%",
-        }}
-      >
+      </Grid>
+      <Grid item sm={6}>
         {isLoaded ? (
           <GoogleMap
             mapContainerStyle={{
@@ -105,8 +97,8 @@ function App() {
         ) : (
           <></>
         )}
-      </div>
-    </div>
+      </Grid>
+    </Grid>
   );
 }
 
