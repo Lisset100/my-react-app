@@ -10,6 +10,7 @@ import {
   TableRow,
 } from "@mui/material";
 import { lisitaDocumentCollectionId } from "../App";
+import MapIcon from '@mui/icons-material/Map';
 
 interface PrintCollectionProps {
   documentsLisita: lisitaDocumentCollectionId[] | undefined;
@@ -20,6 +21,10 @@ interface PrintCollectionProps {
     }>
   >;
 }
+const openGoogleMaps = () => {
+  const mapsUrl = 'https://www.google.com/maps';
+  window.open(mapsUrl, '_blank');
+};
 
 const PrintCollection = (props: PrintCollectionProps) => {
   return (
@@ -32,7 +37,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
       >
         <TableHead>
           <TableRow>
-            {["Name", "Age", "Latitude", "Longitude", "Delete", "Go To"].map(
+            {["Name", "Age", "Latitude", "Longitude", "Delete", "Go To", "Open GoogleMaps"].map(
               (data: string, id) => {
                 return (
                   <TableCell key={"HeadRow" + id} align="right">
@@ -80,6 +85,19 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   size="small"
                 >
                   Go To
+                </Button>
+              </TableCell>
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  onClick={openGoogleMaps}
+                  
+                  
+                  color="success"
+                  size="small"
+                >
+                  <MapIcon/>
+                  Open 
                 </Button>
               </TableCell>
             </TableRow>
