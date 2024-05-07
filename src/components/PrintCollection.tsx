@@ -10,7 +10,8 @@ import {
   TableRow,
 } from "@mui/material";
 import { lisitaDocumentCollectionId } from "../App";
-import MapIcon from '@mui/icons-material/Map';
+import MapIcon from "@mui/icons-material/Map";
+import { GeoPoint } from "@firebase/firestore";
 
 interface PrintCollectionProps {
   documentsLisita: lisitaDocumentCollectionId[] | undefined;
@@ -21,9 +22,9 @@ interface PrintCollectionProps {
     }>
   >;
 }
-const openGoogleMaps = () => {
-  const mapsUrl = 'https://www.google.com/maps';
-  window.open(mapsUrl, '_blank');
+const openGoogleMaps = (location: GeoPoint) => {
+  const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${location.latitude}%2C${location.longitude}`;
+  window.open(mapsUrl, "_blank");
 };
 
 const PrintCollection = (props: PrintCollectionProps) => {
@@ -37,15 +38,21 @@ const PrintCollection = (props: PrintCollectionProps) => {
       >
         <TableHead>
           <TableRow>
-            {["Name", "Age", "Latitude", "Longitude", "Delete", "Go To", "Open GoogleMaps"].map(
-              (data: string, id) => {
-                return (
-                  <TableCell key={"HeadRow" + id} align="right">
-                    {data}
-                  </TableCell>
-                );
-              }
-            )}
+            {[
+              "Name",
+              "Age",
+              "Latitude",
+              "Longitude",
+              "Delete",
+              "Go To",
+              "Open GoogleMaps",
+            ].map((data: string, id) => {
+              return (
+                <TableCell key={"HeadRow" + id} align="right">
+                  {data}
+                </TableCell>
+              );
+            })}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -90,14 +97,12 @@ const PrintCollection = (props: PrintCollectionProps) => {
               <TableCell align="right">
                 <Button
                   variant="contained"
-                  onClick={openGoogleMaps}
-                  
-                  
+                  onClick={() => openGoogleMaps(row.location.location)}
                   color="success"
                   size="small"
                 >
-                  <MapIcon/>
-                  Open 
+                  <MapIcon />
+                  Open
                 </Button>
               </TableCell>
             </TableRow>
