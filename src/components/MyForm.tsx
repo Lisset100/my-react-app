@@ -7,17 +7,19 @@ import {
 } from "../firebase";
 import {
   Button,
+  FormControlLabel,
   Grid,
   InputLabel,
   MenuItem,
   Select,
+  Switch,
   TextField,
 } from "@mui/material";
 import { FormControl } from "@mui/base/FormControl";
 import { GeoPoint } from "firebase/firestore";
 import { StandaloneSearchBox } from "@react-google-maps/api";
 
-const initialData = {
+export const initialData = {
   name: "",
   age: 0,
   location: {
@@ -34,19 +36,21 @@ interface MyFormProps {
       lng: number;
     }>
   >;
+  data: lisitaDocumentCollection;
+  setData: React.Dispatch<React.SetStateAction<lisitaDocumentCollection>>;
 }
 
 export const MyForm: React.FC<MyFormProps> = (props) => {
-  const [data, setData] = useState<lisitaDocumentCollection>(initialData);
+  const [switchTypeSearch, setSwitchTypeSearch] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const result = await insertData(data);
+    const result = await insertData(props.data);
     if (result) {
-      setData(initialData);
+      props.setData(initialData);
       props.setCenter({
-        lat: data.location.location.latitude,
-        lng: data.location.location.longitude,
+        lat: props.data.location.location.latitude,
+        lng: props.data.location.location.longitude,
       });
       if (searchBoxRef.current) searchBoxRef.current.value = "";
     }
@@ -54,7 +58,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
 
   const handleDeleteAll = async () => {
     const result = await deleteDocument();
-    if (result) setData(initialData);
+    if (result) props.setData(initialData);
   };
   const [searchBox, setSearchBox] =
     useState<google.maps.places.SearchBox | null>(null);
@@ -72,9 +76,9 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                 id="name"
                 type="text"
                 label={"Name"}
-                value={data.name}
+                value={props.data.name}
                 onChange={(e) =>
-                  setData((beforeData) => {
+                  props.setData((beforeData) => {
                     return { ...beforeData, name: e.target.value };
                   })
                 }
@@ -88,9 +92,9 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                 id="age"
                 type="number"
                 label={"Age"}
-                value={data.age}
+                value={props.data.age}
                 onChange={(e) =>
-                  setData((beforeData) => ({
+                  props.setData((beforeData) => ({
                     ...beforeData,
                     age: parseInt(e.target.value),
                   }))
@@ -99,13 +103,27 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
             </FormControl>
           </Grid>
           <Grid item xs={12}>
-            {props.isLoaded && (
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={switchTypeSearch}
+                  onChange={() => {
+                    setSwitchTypeSearch((data) => !data);
+                  }}
+                  name="gilad"
+                />
+              }
+              label="Select on Map"
+            />
+          </Grid>
+          {props.isLoaded && !switchTypeSearch && (
+            <Grid item xs={12}>
               <StandaloneSearchBox
                 onPlacesChanged={() => {
                   searchBox?.getPlaces()?.forEach((data) => {
                     const location = data.geometry?.location?.toJSON();
                     if (location) {
-                      setData((data) => ({
+                      props.setData((data) => ({
                         ...data,
                         location: {
                           ...data.location,
@@ -127,8 +145,35 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                   inputRef={searchBoxRef}
                 />
               </StandaloneSearchBox>
-            )}
-          </Grid>
+            </Grid>
+          )}
+          {switchTypeSearch && (
+            <>
+              <Grid item xs={6}>
+                <TextField
+                  disabled
+                  required
+                  id="outlined-required"
+                  label="latitude"
+                  defaultValue="0"
+                  placeholder=""
+                  fullWidth
+                  value={props.data.location.location.latitude}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  disabled
+                  id="outlined-disabled"
+                  label="Longitude"
+                  defaultValue="0"
+                  placeholder=""
+                  fullWidth
+                  value={props.data.location.location.longitude}
+                />
+              </Grid>
+            </>
+          )}
           <Grid item xs={12}>
             <FormControl>
               <InputLabel id="select-icon-label">Type</InputLabel>
@@ -137,10 +182,10 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                 defaultValue={TypeLocation.HOME}
                 labelId="select-icon-label"
                 id="select-icon"
-                value={data.location.type}
+                value={props.data.location.type}
                 label="Type"
                 onChange={(e) => {
-                  setData((data) => ({
+                  props.setData((data) => ({
                     ...data,
                     location: {
                       ...data.location,
@@ -149,8 +194,10 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                   }));
                 }}
               >
-                {Object.entries(TypeLocation).map((data) => (
-                  <MenuItem value={data[1]}>{data[0]}</MenuItem>
+                {Object.entries(TypeLocation).map((data, index) => (
+                  <MenuItem key={"menu" + index} value={data[1]}>
+                    {data[0]}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>

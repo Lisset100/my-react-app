@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { db, lisitaDocumentCollection } from "./firebase";
-import { MyForm } from "./components/MyForm";
-import { onSnapshot, collection } from "@firebase/firestore";
+import { MyForm, initialData } from "./components/MyForm";
+import { onSnapshot, collection, GeoPoint } from "@firebase/firestore";
 import { useJsApiLoader, Marker, GoogleMap } from "@react-google-maps/api";
 import { Library } from "@googlemaps/js-api-loader";
 
@@ -35,6 +35,8 @@ export const YOUR_GOOGLE_MAPS_API_KEY =
 
 const libraries = ["places"] as Library[];
 function App() {
+  const [data, setData] = useState<lisitaDocumentCollection>(initialData);
+
   const [documentsLisita, setDocumentsLisita] =
     useState<lisitaDocumentCollectionId[]>();
 
@@ -76,7 +78,12 @@ function App() {
     <Grid container spacing={2}>
       <Grid item sm={6}>
         <MyComponent argument1={"hola"} />
-        <MyForm isLoaded={isLoaded} setCenter={setCenter} />
+        <MyForm
+          isLoaded={isLoaded}
+          setCenter={setCenter}
+          data={data}
+          setData={setData}
+        />
         <PrintCollection
           documentsLisita={documentsLisita}
           setCenter={setCenter}
@@ -93,6 +100,22 @@ function App() {
             center={center}
             zoom={12}
             onLoad={onLoad}
+            onClick={(event) => {
+              setData((data) => {
+                const latLngJson = event.latLng?.toJSON();
+                if (latLngJson?.lat && latLngJson.lng) {
+                  return {
+                    ...data,
+                    location: {
+                      ...data.location,
+                      location: new GeoPoint(latLngJson.lat, latLngJson.lng),
+                    },
+                  };
+                }
+                return data;
+              });
+              console.log(".........data", event.latLng?.toJSON());
+            }}
             onUnmount={onUnmount}
           >
             {/* Child components, such as markers, info windows, etc. */}
