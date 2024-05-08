@@ -18,6 +18,9 @@ import {
 import { FormControl } from "@mui/base/FormControl";
 import { GeoPoint } from "firebase/firestore";
 import { StandaloneSearchBox } from "@react-google-maps/api";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { json2csv } from "json-2-csv";
+import { lisitaDocumentCollectionId } from "../App";
 
 export const initialData = {
   name: "",
@@ -38,6 +41,7 @@ interface MyFormProps {
   >;
   data: lisitaDocumentCollection;
   setData: React.Dispatch<React.SetStateAction<lisitaDocumentCollection>>;
+  documentsLisita: lisitaDocumentCollectionId[] | undefined;
 }
 
 export const MyForm: React.FC<MyFormProps> = (props) => {
@@ -65,6 +69,23 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
 
   const searchBoxRef = useRef<HTMLInputElement>(null);
 
+  function formatArray() {
+    const result = props.documentsLisita?.map?.((data) => {
+      const location = data.location.location.toJSON();
+      return {
+        age: data.age,
+        name: data.name,
+        ...location,
+      };
+    });
+    if (result) {
+      return json2csv(result, {
+        emptyFieldValue: "", // Set empty strings for null or undefined fields
+      });
+    }
+    return "";
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -78,9 +99,10 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
                 label={"Name"}
                 value={props.data.name}
                 onChange={(e) =>
-                  props.setData((beforeData) => {
-                    return { ...beforeData, name: e.target.value };
-                  })
+                  props.setData((beforeData) => ({
+                    ...beforeData,
+                    name: e.target.value,
+                  }))
                 }
               />
             </FormControl>
@@ -214,13 +236,34 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
           <Button type="submit" variant="contained" color="success">
             Save Data
           </Button>
-          <Button
-            variant="outlined"
-            onClick={() => handleDeleteAll()}
-            color="error"
-          >
-            Delete All
-          </Button>
+          <Grid container item justifyContent="space-between" xs={6}>
+            {props.documentsLisita && (
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  var blob = new Blob([formatArray()], { type: "text/csv" });
+                  var url = URL.createObjectURL(blob);
+                  // Create a link to download it
+                  var pom = document.createElement("a");
+                  pom.href = url;
+                  pom.setAttribute("download", "filename.csv");
+                  pom.click();
+                }}
+                color="success"
+                endIcon={<CloudDownloadIcon />}
+              >
+                Download
+              </Button>
+            )}
+
+            <Button
+              variant="outlined"
+              onClick={() => handleDeleteAll()}
+              color="error"
+            >
+              Delete All
+            </Button>
+          </Grid>
         </Grid>
       </form>
     </div>
