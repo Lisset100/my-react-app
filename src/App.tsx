@@ -83,6 +83,7 @@ function App() {
           setCenter={setCenter}
           data={data}
           setData={setData}
+          documentsLisita={documentsLisita}
         />
         <PrintCollection
           documentsLisita={documentsLisita}
