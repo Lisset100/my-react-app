@@ -12,7 +12,7 @@ import {
 import { lisitaDocumentCollectionId } from "../App";
 import MapIcon from "@mui/icons-material/Map";
 import { GeoPoint } from "@firebase/firestore";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useState } from "react";
 
 interface PrintCollectionProps {
@@ -34,15 +34,20 @@ const PrintCollection = (props: PrintCollectionProps) => {
   const [copiedData, setCopiedData] = useState("");
 
   const copyDataToClipboard = (rowData: lisitaDocumentCollectionId) => {
-    const { name, age, location } = rowData;
-    const locationText = `Name: ${name}, Age: ${age}, Latitude: ${location.location.latitude}, Longitude: ${location.location.longitude}`;
-    navigator.clipboard.writeText(locationText)
+    const {
+      name,
+      age,
+      location: { location },
+      id,
+    } = rowData;
+    navigator.clipboard
+      .writeText(JSON.stringify({ name, age, ...{ location } }))
       .then(() => {
-        setCopiedData(locationText);
-        setTimeout(() => setCopiedData(""), 3000); 
+        setCopiedData(id);
+        setTimeout(() => setCopiedData(""), 3000);
       })
-      .catch(error => {
-        console.error('Error copying to clipboard:', error);
+      .catch((error) => {
+        console.error("Error copying to clipboard:", error);
       });
   };
 
@@ -64,7 +69,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
               "Delete",
               "Go To",
               "Open GoogleMaps",
-              "Copy Data"
+              "Copy Data",
             ].map((data: string, id) => {
               return (
                 <TableCell key={"HeadRow" + id} align="right">
@@ -131,12 +136,11 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   color="primary"
                   size="small"
                 >
-                  <ContentCopyIcon/>
+                  <ContentCopyIcon />
                   Copy
                 </Button>
-                {copiedData === `Name: ${row.name}, Age: ${row.age}, Latitude: ${row.location.location.latitude}, Longitude: ${row.location.location.longitude}` && <span>Copied!</span>}
+                {copiedData === row.id && <span>Copied!</span>}
               </TableCell>
-              
             </TableRow>
           ))}
         </TableBody>
