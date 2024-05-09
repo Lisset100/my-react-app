@@ -12,6 +12,8 @@ import {
 import { lisitaDocumentCollectionId } from "../App";
 import MapIcon from "@mui/icons-material/Map";
 import { GeoPoint } from "@firebase/firestore";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { useState } from "react";
 
 interface PrintCollectionProps {
   documentsLisita: lisitaDocumentCollectionId[] | undefined;
@@ -22,12 +24,28 @@ interface PrintCollectionProps {
     }>
   >;
 }
+
 const openGoogleMaps = (location: GeoPoint) => {
   const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${location.latitude}%2C${location.longitude}`;
   window.open(mapsUrl, "_blank");
 };
 
 const PrintCollection = (props: PrintCollectionProps) => {
+  const [copiedData, setCopiedData] = useState("");
+
+  const copyDataToClipboard = (rowData: lisitaDocumentCollectionId) => {
+    const { name, age, location } = rowData;
+    const locationText = `Name: ${name}, Age: ${age}, Latitude: ${location.location.latitude}, Longitude: ${location.location.longitude}`;
+    navigator.clipboard.writeText(locationText)
+      .then(() => {
+        setCopiedData(locationText);
+        setTimeout(() => setCopiedData(""), 3000); 
+      })
+      .catch(error => {
+        console.error('Error copying to clipboard:', error);
+      });
+  };
+
   return (
     <TableContainer component={Paper} sx={{ maxHeight: 400 }}>
       <Table
@@ -46,6 +64,7 @@ const PrintCollection = (props: PrintCollectionProps) => {
               "Delete",
               "Go To",
               "Open GoogleMaps",
+              "Copy Data"
             ].map((data: string, id) => {
               return (
                 <TableCell key={"HeadRow" + id} align="right">
@@ -105,6 +124,19 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   Open
                 </Button>
               </TableCell>
+              <TableCell align="right">
+                <Button
+                  variant="contained"
+                  onClick={() => copyDataToClipboard(row)}
+                  color="primary"
+                  size="small"
+                >
+                  <ContentCopyIcon/>
+                  Copy
+                </Button>
+                {copiedData === `Name: ${row.name}, Age: ${row.age}, Latitude: ${row.location.location.latitude}, Longitude: ${row.location.location.longitude}` && <span>Copied!</span>}
+              </TableCell>
+              
             </TableRow>
           ))}
         </TableBody>
