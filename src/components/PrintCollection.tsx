@@ -37,11 +37,11 @@ const PrintCollection = (props: PrintCollectionProps) => {
     const {
       name,
       age,
-      location: { location },
+      location: { location: subLocation },
       id,
     } = rowData;
     navigator.clipboard
-      .writeText(JSON.stringify({ name, age, ...{ location } }))
+      .writeText(JSON.stringify({ name, age, ...subLocation.toJSON() }))
       .then(() => {
         setCopiedData(id);
         setTimeout(() => setCopiedData(""), 3000);
