@@ -44,12 +44,6 @@ function App() {
   >([]);
   const [switchTypeSearch, setSwitchTypeSearch] = useState(false);
 
-  useEffect(() => {
-    if (!switchTypeSearch) {
-      setCurrentMarker([]);
-    }
-  }, [switchTypeSearch]);
-
   const [center, setCenter] = useState(initCenter);
 
   useEffect(() => {
@@ -143,26 +137,26 @@ function App() {
             onUnmount={onUnmount}
           >
             {/* Child components, such as markers, info windows, etc. */}
-            {documentsLisita &&
-              [...documentsLisita, ...currentMarker]?.map(
-                ({ location }, id) => (
-                  <Marker
-                    icon={{
-                      path: svgIconToDataUrl(location?.type),
-                      fillColor: "#fff",
-                      strokeColor: "#d32f2f",
-                      strokeWeight: 2,
-                      fillOpacity: 1,
-                      scale: 1,
-                    }}
-                    key={"marker" + id}
-                    position={{
-                      lat: location?.location?.latitude,
-                      lng: location?.location?.longitude,
-                    }}
-                  />
-                )
-              )}
+            {(documentsLisita && switchTypeSearch
+              ? [...documentsLisita, ...currentMarker]
+              : documentsLisita
+            )?.map(({ location }, id) => (
+              <Marker
+                icon={{
+                  path: svgIconToDataUrl(location?.type),
+                  fillColor: "#fff",
+                  strokeColor: "#d32f2f",
+                  strokeWeight: 2,
+                  fillOpacity: 1,
+                  scale: 1,
+                }}
+                key={"marker" + id}
+                position={{
+                  lat: location?.location?.latitude,
+                  lng: location?.location?.longitude,
+                }}
+              />
+            ))}
           </GoogleMap>
         ) : (
           <></>
