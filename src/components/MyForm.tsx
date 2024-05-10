@@ -21,6 +21,8 @@ import { StandaloneSearchBox } from "@react-google-maps/api";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { json2csv } from "json-2-csv";
 import { lisitaDocumentCollectionId } from "../App";
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export const initialData = {
   name: "",
@@ -233,33 +235,39 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
           paddingTop={3}
           paddingBottom={3}
         >
-          <Button type="submit" variant="contained" color="success">
+          <Button
+            type="submit"
+            variant="contained"
+            color="success"
+            endIcon={<SaveIcon />}
+          >
             Save Data
           </Button>
           <Grid container item justifyContent="space-between" xs={6}>
-            {props.documentsLisita && (
-              <Button
-                variant="outlined"
-                onClick={() => {
-                  var blob = new Blob([formatArray()], { type: "text/csv" });
-                  var url = URL.createObjectURL(blob);
-                  // Create a link to download it
-                  var pom = document.createElement("a");
-                  pom.href = url;
-                  pom.setAttribute("download", "filename.csv");
-                  pom.click();
-                }}
-                color="success"
-                endIcon={<CloudDownloadIcon />}
-              >
-                Download
-              </Button>
-            )}
+            <Button
+              variant="outlined"
+              onClick={() => {
+                var blob = new Blob([formatArray()], { type: "text/csv" });
+                var url = URL.createObjectURL(blob);
+                // Create a link to download it
+                var pom = document.createElement("a");
+                pom.href = url;
+                pom.setAttribute("download", "filename.csv");
+                pom.click();
+              }}
+              color="success"
+              endIcon={<CloudDownloadIcon />}
+              disabled={!props.documentsLisita?.length}
+            >
+              Download
+            </Button>
 
             <Button
               variant="outlined"
               onClick={() => handleDeleteAll()}
               color="error"
+              disabled={!props.documentsLisita?.length}
+              endIcon={<DeleteIcon />}
             >
               Delete All
             </Button>
