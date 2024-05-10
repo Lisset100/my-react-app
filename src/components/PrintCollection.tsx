@@ -14,6 +14,8 @@ import MapIcon from "@mui/icons-material/Map";
 import { GeoPoint } from "@firebase/firestore";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useState } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FmdGoodIcon from "@mui/icons-material/FmdGood";
 
 interface PrintCollectionProps {
   documentsLisita: lisitaDocumentCollectionId[] | undefined;
@@ -72,7 +74,13 @@ const PrintCollection = (props: PrintCollectionProps) => {
               "Copy Data",
             ].map((data: string, id) => {
               return (
-                <TableCell key={"HeadRow" + id} align="right">
+                <TableCell
+                  key={"HeadRow" + id}
+                  align="left"
+                  style={{
+                    whiteSpace: "nowrap",
+                  }}
+                >
                   {data}
                 </TableCell>
               );
@@ -85,25 +93,26 @@ const PrintCollection = (props: PrintCollectionProps) => {
               key={"row" + id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell align="right">{row.name}</TableCell>
-              <TableCell align="right">{row.age}</TableCell>
-              <TableCell align="right">
+              <TableCell align="left">{row.name}</TableCell>
+              <TableCell align="left">{row.age}</TableCell>
+              <TableCell align="left">
                 {row.location.location.latitude}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="center">
                 {row.location.location.longitude}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <Button
                   variant="contained"
                   onClick={() => handleDeleteOnlyOne(row.id)}
                   color="error"
                   size="small"
+                  startIcon={<DeleteIcon />}
                 >
                   Delete
                 </Button>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <Button
                   variant="contained"
                   onClick={() =>
@@ -114,29 +123,33 @@ const PrintCollection = (props: PrintCollectionProps) => {
                   }
                   color="primary"
                   size="small"
+                  startIcon={<FmdGoodIcon />}
+                  style={{
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   Go To
                 </Button>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <Button
                   variant="contained"
                   onClick={() => openGoogleMaps(row.location.location)}
                   color="success"
                   size="small"
+                  startIcon={<MapIcon />}
                 >
-                  <MapIcon />
                   Open
                 </Button>
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="left">
                 <Button
                   variant="contained"
                   onClick={() => copyDataToClipboard(row)}
                   color="primary"
                   size="small"
+                  startIcon={<ContentCopyIcon />}
                 >
-                  <ContentCopyIcon />
                   Copy
                 </Button>
                 {copiedData === row.id && <span>Copied!</span>}
