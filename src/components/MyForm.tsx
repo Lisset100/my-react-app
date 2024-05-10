@@ -42,11 +42,11 @@ interface MyFormProps {
   data: lisitaDocumentCollection;
   setData: React.Dispatch<React.SetStateAction<lisitaDocumentCollection>>;
   documentsLisita: lisitaDocumentCollectionId[] | undefined;
+  switchTypeSearch: boolean;
+  setSwitchTypeSearch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const MyForm: React.FC<MyFormProps> = (props) => {
-  const [switchTypeSearch, setSwitchTypeSearch] = useState(false);
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const result = await insertData(props.data);
@@ -128,9 +128,9 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
             <FormControlLabel
               control={
                 <Switch
-                  checked={switchTypeSearch}
+                  checked={props.switchTypeSearch}
                   onChange={() => {
-                    setSwitchTypeSearch((data) => !data);
+                    props.setSwitchTypeSearch((data) => !data);
                   }}
                   name="gilad"
                 />
@@ -138,7 +138,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
               label="Select on Map"
             />
           </Grid>
-          {props.isLoaded && !switchTypeSearch && (
+          {props.isLoaded && !props.switchTypeSearch && (
             <Grid item xs={12}>
               <StandaloneSearchBox
                 onPlacesChanged={() => {
@@ -169,7 +169,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
               </StandaloneSearchBox>
             </Grid>
           )}
-          {switchTypeSearch && (
+          {props.switchTypeSearch && (
             <>
               <Grid item xs={6}>
                 <TextField

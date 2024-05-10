@@ -9,6 +9,7 @@ import {
   doc,
   GeoPoint,
 } from "firebase/firestore";
+import { IconNames } from "./App";
 
 export enum TypeLocation {
   HOME = "Home",
@@ -19,7 +20,7 @@ export interface lisitaDocumentCollection {
   name: string;
   age: number;
   location: {
-    type: TypeLocation;
+    type: IconNames;
     location: GeoPoint;
   };
 }
