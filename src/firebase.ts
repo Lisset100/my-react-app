@@ -22,6 +22,7 @@ export interface lisitaDocumentCollection {
   location: {
     type: IconNames;
     location: GeoPoint;
+    styleMarker?: Partial<google.maps.Symbol>;
   };
 }
 

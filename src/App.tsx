@@ -24,7 +24,7 @@ export type IconNames = keyof typeof Icons;
 
 const svgIconToDataUrl = (IconComponent: IconNames) => {
   const MyIcon = Icons[IconComponent];
-  const iconString = ReactDOMServer.renderToString(<MyIcon />);
+  const iconString = ReactDOMServer.renderToString(<MyIcon fontSize="small" />);
   const parser = new DOMParser();
   const svgDoc = parser.parseFromString(iconString, "image/svg+xml");
   return svgDoc.querySelector("path")?.getAttribute("d") as string;
@@ -119,6 +119,9 @@ function App() {
                       location: {
                         type: "GpsFixed",
                         location,
+                        styleMarker: {
+                          strokeColor: "#035efc",
+                        },
                       },
                     },
                   ]);
@@ -140,23 +143,27 @@ function App() {
             {(documentsLisita && switchTypeSearch
               ? [...documentsLisita, ...currentMarker]
               : documentsLisita
-            )?.map(({ location }, id) => (
-              <Marker
-                icon={{
-                  path: svgIconToDataUrl(location?.type),
-                  fillColor: "#fff",
-                  strokeColor: "#d32f2f",
-                  strokeWeight: 2,
-                  fillOpacity: 1,
-                  scale: 1,
-                }}
-                key={"marker" + id}
-                position={{
-                  lat: location?.location?.latitude,
-                  lng: location?.location?.longitude,
-                }}
-              />
-            ))}
+            )?.map((data, id) => {
+              const { styleMarker } = data.location;
+              return (
+                <Marker
+                  icon={{
+                    path: svgIconToDataUrl(data.location?.type),
+                    fillColor: "#fff",
+                    strokeColor: "#d32f2f",
+                    strokeWeight: 2,
+                    fillOpacity: 1,
+                    scale: 0.9,
+                    ...styleMarker,
+                  }}
+                  key={"marker" + id}
+                  position={{
+                    lat: data.location?.location?.latitude,
+                    lng: data.location?.location?.longitude,
+                  }}
+                />
+              );
+            })}
           </GoogleMap>
         ) : (
           <></>
