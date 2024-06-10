@@ -21,6 +21,7 @@ import { StandaloneSearchBox } from "@react-google-maps/api";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { json2csv } from "json-2-csv";
 import { lisitaDocumentCollectionId } from "../App";
+import Print from "./Print";
 
 export const initialData = {
   name: "",
@@ -88,6 +89,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
 
   return (
     <div>
+      <Print />
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={8}>
