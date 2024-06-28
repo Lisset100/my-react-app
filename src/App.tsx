@@ -21,7 +21,7 @@ export interface lisitaDocumentCollectionId extends lisitaDocumentCollection {
 }
 
 export type IconNames = keyof typeof Icons;
-
+console.log("=========================>1")
 const svgIconToDataUrl = (IconComponent: IconNames) => {
   const MyIcon = Icons[IconComponent];
   const iconString = ReactDOMServer.renderToString(<MyIcon />);
