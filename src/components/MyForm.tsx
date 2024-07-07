@@ -1,28 +1,30 @@
-import React, { useRef, useState } from "react";
-import {
-  insertData,
-  lisitaDocumentCollection,
-  deleteDocument,
-  TypeLocation,
-} from "../firebase";
+import { FormControl } from "@mui/base/FormControl";
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SaveIcon from "@mui/icons-material/Save";
 import {
   Button,
   FormControlLabel,
+  FormLabel,
   Grid,
   InputLabel,
   MenuItem,
   Select,
   Switch,
   TextField,
+  Typography,
 } from "@mui/material";
-import { FormControl } from "@mui/base/FormControl";
-import { GeoPoint } from "firebase/firestore";
 import { StandaloneSearchBox } from "@react-google-maps/api";
-import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { GeoPoint } from "firebase/firestore";
 import { json2csv } from "json-2-csv";
+import React, { useRef, useState } from "react";
 import { lisitaDocumentCollectionId } from "../App";
-import SaveIcon from "@mui/icons-material/Save";
-import DeleteIcon from "@mui/icons-material/Delete";
+import {
+  deleteDocument,
+  insertData,
+  lisitaDocumentCollection,
+  TypeLocation,
+} from "../firebase";
 
 export const initialData = {
   name: "",
@@ -126,7 +128,13 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
               />
             </FormControl>
           </Grid>
-          <Grid item xs={12}>
+
+          <Grid container alignItems="center" item xs={12}>
+            <Grid item>
+              <Typography fontSize="20px" variant="body1" component="span" style={{ marginRight: '8px' }}>
+                Location
+              </Typography>
+            </Grid>
             <FormControlLabel
               control={
                 <Switch
@@ -163,7 +171,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
               >
                 <TextField
                   fullWidth
-                  label="Location"
+                  label="Type the location or select on the map"
                   variant="outlined"
                   placeholder=""
                   inputRef={searchBoxRef}
@@ -200,7 +208,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
           )}
           <Grid item xs={12}>
             <FormControl>
-              <InputLabel id="select-icon-label">Type</InputLabel>
+              <FormLabel sx={{ fontSize: '1.2rem', color: 'black', marginBottom: '10px' }} id="select-icon-label">Type</>
               <Select
                 fullWidth
                 defaultValue={TypeLocation.HOME}
@@ -247,10 +255,10 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
             <Button
               variant="outlined"
               onClick={() => {
-                var blob = new Blob([formatArray()], { type: "text/csv" });
-                var url = URL.createObjectURL(blob);
+                const blob = new Blob([formatArray()], { type: "text/csv" });
+                const url = URL.createObjectURL(blob);
                 // Create a link to download it
-                var pom = document.createElement("a");
+                const pom = document.createElement("a");
                 pom.href = url;
                 pom.setAttribute("download", "filename.csv");
                 pom.click();
