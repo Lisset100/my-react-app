@@ -5,7 +5,6 @@ import SaveIcon from "@mui/icons-material/Save";
 import {
   Button,
   FormControlLabel,
-  FormLabel,
   Grid,
   InputLabel,
   MenuItem,
@@ -208,7 +207,7 @@ export const MyForm: React.FC<MyFormProps> = (props) => {
           )}
           <Grid item xs={12}>
             <FormControl>
-              <FormLabel sx={{ fontSize: '1.2rem', color: 'black', marginBottom: '10px' }} id="select-icon-label">Type</>
+              <InputLabel sx={{ fontSize: '1.2rem', color: 'black', marginBottom: '10px' }} id="select-icon-label">Type</InputLabel>
               <Select
                 fullWidth
                 defaultValue={TypeLocation.HOME}
