@@ -24,7 +24,7 @@ import {
   lisitaDocumentCollection,
   TypeLocation,
 } from "../firebase";
-
+console.log("hola")
 export const initialData = {
   name: "",
   age: 0,
